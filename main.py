@@ -1,12 +1,36 @@
 import discord
 import genshin
-import os
 import asyncio
 from discord import app_commands
 from discord.ext import commands
 import json
 from replit import Database
 import genshinstats as gs
+
+class getgenshin():
+    def stats(self,user):
+        index = list(db["Users"]["User_ID"]).index(str(user))
+        gs.set_cookie(ltuid=db["Users"]["ltuid"][index], ltoken=db["Users"]["ltoken"][index])
+        return gs.get_user_stats(db["Users"]["UID"][index])['stats']
+    def characters(self,user):
+        index = list(db["Users"]["User_ID"]).index(str(user))
+        gs.set_cookie(ltuid=db["Users"]["ltuid"][index], ltoken=db["Users"]["ltoken"][index])
+        return gs.get_characters(db["Users"]["UID"][index])
+    def abbys(self,user):
+        index = list(db["Users"]["User_ID"]).index(str(user))
+        gs.set_cookie(ltuid=db["Users"]["ltuid"][index], ltoken=db["Users"]["ltoken"][index])
+        spiral_abyss = gs.get_spiral_abyss(db["Users"]["UID"][index], previous=True)
+        return spiral_abyss['stats']
+    def notes(self,user):
+        index = list(db["Users"]["User_ID"]).index(str(user))
+        gs.set_cookie(ltuid=db["Users"]["ltuid"][index], ltoken=db["Users"]["ltoken"][index])
+        return gs.get_notes(db["Users"]["UID"][index])
+
+
+gg = getgenshin()
+
+    
+
 
 with open("config.json") as config:
     content = json.load(config)
@@ -44,9 +68,7 @@ async def link(interaction: discord.Interaction, ltuid_cookie: str, ltoken_cooki
 @bot.tree.command(name="profile", description="Your profile stats")
 async def profile(interaction: discord.Interaction):
     if str(interaction.user.id) in str(db["Users"]["User_ID"]).split("'"):
-        index = list(db["Users"]["User_ID"]).index(str(interaction.user.id))
-        gs.set_cookie(ltuid=db["Users"]["ltuid"][index], ltoken=db["Users"]["ltoken"][index])
-        stats = gs.get_user_stats(db["Users"]["UID"][index])['stats']
+        stats = gg.stats(interaction.user.id)
         embed = discord.Embed(title=f"{interaction.user.name}'s Profile")
         embed.set_thumbnail(url="https://pbs.twimg.com/media/E99MNCzVkAY-1V8?format=jpg&name=small")
         await interaction.response.defer(ephemeral=False)
@@ -60,9 +82,7 @@ async def profile(interaction: discord.Interaction):
 @bot.tree.command(name="characters", description="Your characters information")
 async def characters(interaction: discord.Interaction):
     if str(interaction.user.id) in str(db["Users"]["User_ID"]).split("'"):
-        index = list(db["Users"]["User_ID"]).index(str(interaction.user.id))
-        gs.set_cookie(ltuid=db["Users"]["ltuid"][index], ltoken=db["Users"]["ltoken"][index])
-        characters = gs.get_characters(db["Users"]["UID"][index])
+        characters = gg.characters(interaction.user.id)
         embed = discord.Embed(title=f"{interaction.user.name}'s characters")
         embed.set_thumbnail(url="https://pbs.twimg.com/media/E99MNCzVkAY-1V8?format=jpg&name=small")
         await interaction.response.defer(ephemeral=False)
@@ -71,22 +91,47 @@ async def characters(interaction: discord.Interaction):
         for char in characters:
             j += 1
             if j % 25 != 0 and j<25:
-                embed.add_field(name={char['name']:10}, value = f"{char['rarity']}* | lvl {char['level']:2} C{char['constellation']}")
+                embed.add_field(name=f"{char['name']:10}", value = f"{char['rarity']}* | lvl {char['level']:2} C{char['constellation']}", inline=True)
                 
             else:
                 if j % 25 == 0:
                     await interaction.followup.send(embed=embed)
                     embed = discord.Embed(
-                    colour = discord.Colour.blue()
+                    title=f"{interaction.user.name}'s characters"
                     )
 
             if j > 25 and (j % 25 != 0):
-                await interaction.response.defer(ephemeral=False)
-                await asyncio.sleep(5)
-                embed.add_field(name={char['name']:10}, value=f"{char['rarity']}* | lvl {char['level']:2} C{char['constellation']}")
-            await interaction.followup.send(embed=embed)
+                embed.add_field(name=f"{char['name']:10}", value=f"{char['rarity']}* | lvl {char['level']:2} C{char['constellation']}", inline=True)
+        await interaction.followup.send(embed=embed)
     else:
         await interaction.response.send_message("You have to register! (type /register)")
+
+@bot.tree.command(name="abbys", description="Your characters abbys stats")
+async def abbys(interaction: discord.Interaction):
+    if str(interaction.user.id) in str(db["Users"]["User_ID"]).split("'"):
+        stats = gg.abbys(interaction.user.id)
+        embed = discord.Embed(title=f"{interaction.user.name}'s Abbys Stats")
+        embed.set_thumbnail(url=interaction.user.avatar.url)
+        embed.set_image(url="https://static.wikia.nocookie.net/gensin-impact/images/c/ca/Domain_Spiral_Abyss_Abyssal_Moon_Spire.png/revision/latest?cb=20210326011346")
+        for field, valuee in stats.items():
+            embed.add_field(name = str(field), value = str(valuee))
+        await interaction.response.send_message(embed=embed)
+    else:
+        await interaction.response.send_message("You have to register! (type /register)")
+
+@bot.tree.command(name="resources", description="Your Resources")
+async def resources(interaction: discord.Interaction):
+    if str(interaction.user.id) in str(db["Users"]["User_ID"]).split("'"):
+        notes = gg.notes(interaction.user.id)
+        embed = discord.Embed(title=f"{interaction.user.name}'s resources")
+        embed.set_thumbnail(url=interaction.user.avatar.url)
+        embed.add_field(name="Current resin: ",value =f"{notes['resin']}/{notes['max_resin']}")
+        embed.add_field(name="Current realm currency: ",value =f"{notes['realm_currency']}/{notes['max_realm_currency']}")
+        embed.add_field(name="Expeditions: ",value =f"{len(notes['expeditions'])}/{notes['max_expeditions']}")
+        await interaction.response.send_message(embed=embed)
+    else:
+        await interaction.response.send_message("You have to register! (type /register)")
+
 
 bot.run(TOKEN)
 
