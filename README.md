@@ -7,4 +7,6 @@ Commands:<br />
 /profile - shows your profile stats<br />
 /characters - shows your characters information<br />
 /abbys - shows your abbys stats<br />
-/resources - shows your current resources<br />
+/notifications - pings you when your resin/realm currency is ar full capacity<br />
+/daily - reedems your daily reward for checking in at hoyolab<br />
+/wish_history - shows your wish history<br />
