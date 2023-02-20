@@ -7,6 +7,7 @@ import json
 from replit import Database
 import genshinstats as gs
 from MenuButtons import ButtonMenu
+from datetime import date
 
 
 client = genshin.Client(game=genshin.Game.GENSHIN)
@@ -43,7 +44,7 @@ with open("config.json") as config:
 
 db = Database(db_url=DATABASE)
 bot = commands.Bot(command_prefix="!", intents = discord.Intents.all()) 
-print(db["Users"])
+
 
 
 @bot.event
@@ -86,7 +87,6 @@ async def pinging_loop():
             name["Resin_pinged"] = False
         if name["Realm_pinged"] == True and notes["realm_currency"] < notes['max_realm_currency']:
             name["Realm_pinged"] = False
-        print(db["Users"])
         print("looped2")
 
 
@@ -160,6 +160,8 @@ async def characters(interaction: discord.Interaction):
                     pages[1].add_field(name=f"{char['name']:10}", value = f"{char['rarity']}* | lvl {char['level']:2} C{char['constellation']}", inline=True)
                 
             await interaction.response.send_message(embed=pages[0],view = ButtonMenu(pages,60))
+            print(characters)
+
             isin = True
             break
         else:
@@ -236,7 +238,7 @@ async def notifications(interaction: discord.Interaction,notifications: app_comm
 
 
 @bot.tree.command(name="daily", description="Claim your daily rewards")
-async def notifications(interaction: discord.Interaction):
+async def daily(interaction: discord.Interaction):
     for name in db["Users"]:
         if name["User_ID"] == interaction.user.id:
             genshincookies(interaction.user.id)
@@ -251,44 +253,158 @@ async def notifications(interaction: discord.Interaction):
                 break
         else:
             isin = False
-        if isin == False:
-            await interaction.response.send_message("You have to register! (type /register)")
+    if isin == False:
+      await interaction.response.send_message("You have to register! (type /register)")
 
 
 @bot.tree.command(name="wish_history", description="Shows your wish history")
-async def notifications(interaction: discord.Interaction):
-    client.authkey = genshin.utility.get_authkey()
-    pages = [discord.Embed(title=f"{interaction.user.name}'s Wishes"),discord.Embed(title=f"{interaction.user.name}'s Wishes"),discord.Embed(title=f"{interaction.user.name}'s Wishes"),discord.Embed(title=f"{interaction.user.name}'s Wishes")]
-    pages[0].set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Item_Intertwined_Fate.png/revision/latest?cb=20201117073436")
-    pages[1].set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Item_Intertwined_Fate.png/revision/latest?cb=20201117073436")
-    pages[2].set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Item_Intertwined_Fate.png/revision/latest?cb=20201117073436")
-    pages[3].set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Item_Intertwined_Fate.png/revision/latest?cb=20201117073436")
-    pages[0].set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}")
-    pages[1].set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}")
-    pages[2].set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}")
-    pages[3].set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}")
-    
-    i=0
-    await interaction.response.defer()
-    await asyncio.sleep(7)
-    async for wish in client.wish_history([301],limit=96):
-        if i<24:
-            i+=1
-            pages[0].add_field(name=f"{i}. {wish.name}", value = f"({wish.rarity}* {wish.type})")
-
-        elif i>=24 and i<48:
-            i+=1
-            pages[1].add_field(name=f"{i}. {wish.name}", value = f"({wish.rarity}* {wish.type})")
-
-        elif i>=48 and i<72:
-            i+=1
-            pages[2].add_field(name=f"{i}. {wish.name}", value = f"({wish.rarity}* {wish.type})")
+async def wishhistory(interaction: discord.Interaction):
+    try:
+        for name in db["Users"]:
+            if name["User_ID"] == interaction.user.id:
+                url = name["Authkey"]
+                authkey = genshin.utility.extract_authkey(url)
+                client.authkey = authkey
+                pages = [discord.Embed(title=f"{interaction.user.name}'s Wishes"),discord.Embed(title=f"{interaction.user.name}'s Wishes"),discord.Embed(title=f"{interaction.user.name}'s Wishes"),discord.Embed(title=f"{interaction.user.name}'s Wishes")]
+                pages[0].set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Item_Intertwined_Fate.png/revision/latest?cb=20201117073436")
+                pages[1].set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Item_Intertwined_Fate.png/revision/latest?cb=20201117073436")
+                pages[2].set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Item_Intertwined_Fate.png/revision/latest?cb=20201117073436")
+                pages[3].set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/1/1f/Item_Intertwined_Fate.png/revision/latest?cb=20201117073436")
+                pages[0].set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}. Data for {name['Authkey_lastupdate']}")
+                pages[1].set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}. Data for {name['Authkey_lastupdate']}")
+                pages[2].set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}. Data for {name['Authkey_lastupdate']}")
+                pages[3].set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}. Data for {name['Authkey_lastupdate']}")
         
+                i=0
+                await interaction.response.defer()
+                await asyncio.sleep(3)
+                async for wish in client.wish_history([301],limit=96):
+                    if i<24:
+                        i+=1
+                        pages[0].add_field(name=f"{i}. {wish.name}", value = f"({wish.rarity}* {wish.type})")
+
+                    elif i>=24 and i<48:
+                        i+=1
+                        pages[1].add_field(name=f"{i}. {wish.name}", value = f"({wish.rarity}* {wish.type})")
+
+                    elif i>=48 and i<72:
+                        i+=1
+                        pages[2].add_field(name=f"{i}. {wish.name}", value = f"({wish.rarity}* {wish.type})")
+                    
+                    else:
+                        i+=1
+                        pages[3].add_field(name=f"{i}. {wish.name}", value = f"({wish.rarity}* {wish.type})")
+                        break
+                await interaction.followup.send(embed=pages[0],view = ButtonMenu(pages,60))
+    except KeyError:
+        await interaction.followup.send("You have to set an authkey! (type /help authkey)")
+    except genshin.errors.AuthkeyTimeout:
+        await interaction.followup.send("Your authkey has timed out! Type /authkey to set a new one")
+
+
+@bot.tree.command(name="diary", description="Shows your earned primos")
+async def diary(interaction: discord.Interaction):
+    for name in db["Users"]:
+        if name["User_ID"] == interaction.user.id:
+            await interaction.response.defer()
+            await asyncio.sleep(3)
+            genshincookies(interaction.user.id)
+            diary = await client.get_diary()
+            embed = discord.Embed(title=f"{interaction.user.name}'s primogems earned this month: {diary.data.current_primogems}")
+            embed.set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/d/d4/Item_Primogem.png/revision/latest?cb=20201117071158")
+            embed.set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}")
+            for category in diary.data.categories:
+                embed.add_field(name=f"{category.name}: ",value =f"{category.amount} primogems ({category.percentage}%)", inline=False)
+                #print(f"{category.percentage}% earned from {category.name} ({category.amount} primogems)")
+            await interaction.followup.send(embed=embed)
+            isin = True
+            break
         else:
-            i+=1
-            pages[3].add_field(name=f"{i}. {wish.name}", value = f"({wish.rarity}* {wish.type})")
-                
-    await interaction.followup.send(embed=pages[0],view = ButtonMenu(pages,60))
+            isin = False
+    if isin == False:
+      await interaction.response.send_message("You have to register! (type /register)")
+
+
+@bot.tree.command(name="authkey", description="Links your authkey")
+@app_commands.describe(authkey="Authkey")
+async def authkey(interaction: discord.Interaction, authkey: str):
+    for name in db["Users"]:
+            if name["User_ID"] == interaction.user.id:
+                name["Authkey"] = authkey
+                name["Authkey_lastupdate"] = str(date.today())
+                await interaction.response.send_message("Authkey set! Remember that your authkey changes every 24 hours, so be sure to update it soon!")
+                isin=True
+                break
+            else:
+                isin=False
+
+    if isin==False:
+        db["Users"].append({"User_ID":interaction.user.id,
+                            "User_name":interaction.user.name,
+                            "ltuid":"",
+                            "ltoken":"",
+                            "UID":"",
+                            "Resin":False,
+                            "Realm_currency":False,
+                            "Resin_pinged":False,
+                            "Realm_pinged":False,
+                            "Authkey":authkey,
+                            "Authkey_lastupdate":str(date.today())
+                                })
+        await interaction.response.send_message("Authkey set! Remember that your authkey changes every 24 hours, so be sure to update it soon!")
+
+
+@bot.tree.command(name="pity", description="Pity counter")
+async def pity(interaction: discord.Interaction):
+    await interaction.response.defer()
+    await asyncio.sleep(3)
+    try:
+        for name in db["Users"]:
+                if name["User_ID"] == interaction.user.id:
+                    url = name["Authkey"]
+                    authkey = genshin.utility.extract_authkey(url)
+                    client.authkey = authkey
+                    standard = 0
+                    banner = 0
+                    weapon = 0
+                    async for wish in client.wish_history(genshin.models.BannerType.STANDARD):
+                        if wish.rarity < 5:
+                            standard += 1
+                        else:
+                            break
+
+                    async for wish in client.wish_history(genshin.models.BannerType.WEAPON):
+                        if wish.rarity < 5:
+                            weapon += 1
+                        else:
+                            break
+
+                    async for wish in client.wish_history(genshin.models.BannerType.CHARACTER):
+                        if wish.rarity < 5:
+                            banner += 1
+                        else:
+                            break
+
+                    embed = discord.Embed(title=f"{interaction.user.name}'s Pity")
+                    embed.set_thumbnail(url="https://static.wikia.nocookie.net/gensin-impact/images/d/d4/Item_Primogem.png/revision/latest?cb=20201117071158")
+                    embed.set_footer(icon_url = interaction.user.avatar.url ,text=f"Requested by {interaction.user.name}. Data for {name['Authkey_lastupdate']}")
+                    embed.add_field(name="Event banner: ",value = banner, inline=False)
+                    embed.add_field(name="Standard: ",value = standard, inline=False)
+                    embed.add_field(name="Weapon: ",value = weapon, inline=False)
+                    await interaction.followup.send(embed=embed)
+                    isin = True
+                    break
+                else:
+                    isin = False
+        if isin == False:
+            await interaction.followup.send("You have to set an authkey! (type /help authkey)")
+    except KeyError:
+        await interaction.followup.send("You have to set an authkey! (type /help authkey)")
+    except genshin.errors.AuthkeyTimeout:
+        await interaction.followup.send("Your authkey has timed out! Type /authkey to set a new one")
+
+
+
 
 bot.run(TOKEN)
 
