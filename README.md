@@ -6,7 +6,12 @@ Commands:<br />
 /link - links your genshin profile<br />
 /profile - shows your profile stats<br />
 /characters - shows your characters information<br />
+/resources - shows your resources<br />
 /abbys - shows your abbys stats<br />
 /notifications - pings you when your resin/realm currency is ar full capacity<br />
 /daily - reedems your daily reward for checking in at hoyolab<br />
 /wish_history - shows your wish history<br />
+/pity - calculates your pity<br />
+/authkey - links your authkey<br />
+/diary - shows your primogems earnings<br />
+
