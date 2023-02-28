@@ -15,8 +15,8 @@ class Help(commands.Cog):
         self.bot = bot   
 
     @app_commands.command(name="help", description="Helps you :)")
-    async def help(self, interaction: discord.Interaction, commands: Optional[Literal['all','link', 'authkey', 'notifications']] = None):
-        if commands is None:
+    async def help(self, interaction: discord.Interaction, command: Optional[Literal['all','link', 'authkey', 'notifications','abbys','characters','pity','wish_history','resources','diary','daily','profile']] = None):
+        if command is None:
             embed = discord.Embed(title="GenshinStalker Helper",color=discord.Color.from_rgb(219, 42, 166))
             embed.add_field(name='', value ='<@1064985978651017318> is a discord bot written by calKU!', inline=False)
             embed.add_field(name='Want to get all avaliable commands?', value ='Try using `/help command:all`', inline=False)
@@ -26,7 +26,7 @@ class Help(commands.Cog):
             embed.add_field(name='Why do I have to link cookies', value ="Cookies allows me to get your hoyolab stats and are **NOT SAFE TO SHARE** (I can probably steal your account but dunno how anyway). Before linking your cookies **PLEASE READ** `/help commad:cookies` for more information ", inline=False)
             await interaction.response.send_message(embed = embed)
 
-        elif commands == 'all':
+        elif command == 'all':
             embed = discord.Embed(title="List of all avaliable commands",color=discord.Color.from_rgb(219, 42, 166))
             embed.add_field(name='', value ='`/link` Links your hoyolab browser cookies', inline=False)
             embed.add_field(name='', value ='`/authkey` Links your genshin authkey', inline=False)
@@ -42,7 +42,7 @@ class Help(commands.Cog):
             embed.add_field(name='If you want to get more informations about a specific command type `/help command:___`', value ='', inline=False)
             await interaction.response.send_message(embed=embed)
     
-        elif commands == 'link':
+        elif command == 'link':
             embed = discord.Embed(title="READ THIS BEFORE LINKING YOUR COOKIES!!!",color=discord.Color.from_rgb(219, 42, 166))
             embed.add_field(name='What are cookies?', value ='Cookies are the default form of authentication over the majority of Mihoyo APIs. These are used in web events and hoyolab utilities such as the Battle Chronicle. The cookies used in these APIs are the same as the ones you use to log in to your hoyolab account', inline=False)
             embed.add_field(name="What does it mean?", value ="I can probably steal your account if you link them (I don't know how anyway), so if you dont trust me **PLEASE DONT LINK YOUR COOKIES**", inline=False)
@@ -57,7 +57,7 @@ class Help(commands.Cog):
             embed.add_field(name="", value ="**6.** Type `/link` and enter what you've copied!", inline=False)
             await interaction.response.send_message(embed=embed)
 
-        elif commands == 'authkey':
+        elif command == 'authkey':
             embed = discord.Embed(title="Authkey Helper",color=discord.Color.from_rgb(219, 42, 166))
             embed.add_field(name='What is authkey?', value ='Authkeys are an alternative authentication.', inline=False)
             embed.add_field(name="Are they safe to share?", value ="Authkeys last only 24 hours, and it's impossible to do any write operations with them. That means authkeys, unlike cookies, **are absolutely safe to share.**", inline=False)
@@ -74,6 +74,62 @@ class Help(commands.Cog):
             embed.add_field(name="", value ="**7.** Type `/authkey` and paste the text to the textbox", inline=False)
             await interaction.response.send_message(embed=embed)
 
+        elif command == 'notifications':
+            embed = discord.Embed(title="Notifications",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It pings you whenever your resin or realm curresncy is full', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
+            await interaction.response.send_message(embed=embed)
+
+        elif command == 'diary':
+            embed = discord.Embed(title="Diary",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It shows how many primogems you farmed this month', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
+            await interaction.response.send_message(embed=embed)
+
+        elif command == 'daily':
+            embed = discord.Embed(title="Daily",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It claims for you your daily rewards from hoyolab daily check-in', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
+            await interaction.response.send_message(embed=embed)
+
+        elif command == 'profile':
+            embed = discord.Embed(title="Profile",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It shows your account stats e.g: achievements, days spent in genshin, spiral abbys and more!', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
+            await interaction.response.send_message(embed=embed)
+
+        elif command == 'characters':
+            embed = discord.Embed(title="Characters",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It shows informations about your owned characters', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
+            await interaction.response.send_message(embed=embed)
+
+        elif command == 'wish_history':
+            embed = discord.Embed(title="Wish History",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It shows your wish history', inline=False)
+            embed.add_field(name="I summoned 5 star an hour ago why I don't see it on the list?", value ='You have to update your authkey everytime you make a wish. Sadly authkeys are not updating automatically :( For more information type `/help:authkey`', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your authkey first. If you didn't, please type `/help command:authkey` and then `/authkey`", inline=False)
+            await interaction.response.send_message(embed=embed)
+
+        elif command == 'pity':
+            embed = discord.Embed(title="Pity",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It shows your pity on every banner avaliable', inline=False)
+            embed.add_field(name="I summoned 5 star an hour ago why my pity counter is not updated?", value ='You have to update your authkey everytime you make a wish. Sadly authkeys are not updating automatically :( For more information type `/help:authkey`', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your authkey first. If you didn't, please type `/help command:authkey` and then `/authkey`", inline=False)
+            await interaction.response.send_message(embed=embed)
+
+        elif command == 'abbys':
+            embed = discord.Embed(title="Abbys",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It shows your previous abbys stats', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
+            await interaction.response.send_message(embed=embed)
+        
+        else command == 'resources':
+            embed = discord.Embed(title="Resources",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It shows your current resin, realm currency and expeditions capacity', inline=False)
+            embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
+            await interaction.response.send_message(embed=embed)
+        
         else:
             await interaction.response.send_message(f'You did not select any commands.')
         
