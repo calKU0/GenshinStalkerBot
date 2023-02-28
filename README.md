@@ -1,5 +1,7 @@
 # GenshinStalkerBot
-Via this bot you can get your genshin stats, owned characters information, wish history etc. (This is really really early development)
+Get your genshin stats, owned characters information, wish history etc. (This is really really early development)
+<br />
+Invite Link : https://discord.com/api/oauth2/authorize?client_id=1064985978651017318&permissions=534723950656&scope=bot 
 <br />
 <br />
 Commands:<br />
@@ -14,4 +16,6 @@ Commands:<br />
 /pity - calculates your pity<br />
 /authkey - links your authkey<br />
 /diary - shows your primogems earnings<br />
+/help - shows information about commands<br />
+
 
