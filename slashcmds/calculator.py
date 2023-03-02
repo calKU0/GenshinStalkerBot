@@ -1,17 +1,14 @@
 import discord
 import json
-import asyncio
 import genshin
-from replit import Database
 from discord import app_commands
 from discord.ext import commands
+import re
 
 client = genshin.Client(game=genshin.Game.GENSHIN)
 
 with open("config.json") as config:
     content = json.load(config)
-    DATABASE = content["DATABASE"]
-    db = Database(db_url=DATABASE)
     client.set_cookies(ltuid=content["GENSHIN_COOKIE1"], ltoken=content["GENSHIN_COOKIE2"])
     
 async def character_autocomplete(
@@ -30,23 +27,27 @@ class Calculator(commands.Cog):
         self.bot = bot   
 
 
-    @app_commands.command(name="calcualtor",description="siema")
+    @app_commands.command(name="calculator",description="siema")
     @app_commands.autocomplete(character=character_autocomplete)
     async def calculator(self,interaction: discord.Interaction, character: str):
-        with open("characters.json") as config:
+        with open("data/characters.json") as config:
             content = json.load(config)
             characterid = content[character]
 
         builder = client.calculator()
         builder.set_character(characterid, current=1, target=90)
-
         cost = await builder.calculate()
+
+        name_amount_dict = {}
+        for item in re.findall(r"name='([^']+)'.*?amount=(\d+)", str(cost)):
+            name, amount = item
+            name_amount_dict[name] = int(amount)
+
+        embed = discord.Embed(title="Materials to build " + character,color=discord.Color.from_rgb(219, 42, 166))
+        for key,val in name_amount_dict.items():
+            embed.add_field(name = key, value = val, inline=False)
         
-        print(cost)
-
-
-        await interaction.response.send_message(f'character {character}')
-
+        await interaction.response.send_message(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Calculator(bot))
