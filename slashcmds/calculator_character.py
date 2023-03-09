@@ -40,7 +40,16 @@ class Calculator_character(commands.Cog):
 
         embed = discord.Embed(title=f"Materials needed to build {character} from level {current} to {target}",color=discord.Color.from_rgb(219, 42, 166))
         for key,val in name_amount_dict.items():
-            embed.add_field(name = key + " " + "<:8892mora:1083161748514807930>", value = val, inline=False)
+            #Searching the emoji id
+            with open("data/emojis.json","r") as file:
+                datacontent = json.load(file)
+                for emojiid in datacontent:
+                    if key == emojiid["name"]:
+                        emoji = emojiid["id"]
+                        break
+                    else:
+                        emoji = ''
+                embed.add_field(name = key + " " + emoji, value = val, inline=False)
                     
         await interaction.response.send_message(embed=embed)
 
