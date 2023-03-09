@@ -124,7 +124,7 @@ class Help(commands.Cog):
             embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
             await interaction.response.send_message(embed=embed)
         
-        else command == 'resources':
+        elif command == 'resources':
             embed = discord.Embed(title="Resources",color=discord.Color.from_rgb(219, 42, 166))
             embed.add_field(name='What does this command do?', value ='It shows your current resin, realm currency and expeditions capacity', inline=False)
             embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
