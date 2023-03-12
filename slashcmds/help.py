@@ -15,7 +15,7 @@ class Help(commands.Cog):
         self.bot = bot   
 
     @app_commands.command(name="help", description="Helps you :)")
-    async def help(self, interaction: discord.Interaction, command: Optional[Literal['all','link', 'authkey', 'notifications','abbys','characters','pity','wish_history','resources','diary','daily','profile']] = None):
+    async def help(self, interaction: discord.Interaction, command: Optional[Literal['all','link', 'authkey', 'notifications','abbys','characters','pity','wish_history','resources','diary','daily','profile','auto']] = None):
         if command is None:
             embed = discord.Embed(title="GenshinStalker Helper",color=discord.Color.from_rgb(219, 42, 166))
             embed.add_field(name='', value ='<@1064985978651017318> is a discord bot written by calKU!', inline=False)
@@ -128,6 +128,13 @@ class Help(commands.Cog):
             embed = discord.Embed(title="Resources",color=discord.Color.from_rgb(219, 42, 166))
             embed.add_field(name='What does this command do?', value ='It shows your current resin, realm currency and expeditions capacity', inline=False)
             embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
+            await interaction.response.send_message(embed=embed)
+        elif command == 'auto':
+            embed = discord.Embed(title="Auto",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It automatically do something for you based on your selected option :)', inline=False)
+            embed.add_field(name='What options are available?', value ="For now only the `daily` option", inline=False)
+            embed.add_field(name='What does daily option do?', value ="It redeems your daily rewards from hoyolab every 24 hours, so you don't have to type `/daily` everyday", inline=False)
+            embed.add_field(name='Can I unsign from it', value ="Of course! Just type `/auto` and choose the option that you want to unsign from", inline=False)
             await interaction.response.send_message(embed=embed)
         
         else:
