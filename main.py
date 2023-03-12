@@ -48,6 +48,7 @@ bot = commands.Bot(command_prefix="!", intents = discord.Intents.all())
 async def on_ready():
     task_loop.start()
     pinging_loop.start()
+    await auto_daily()
     print("We've logged in as {0.user}".format(bot))
     for filename in os.listdir('./slashcmds'):
         if filename.endswith('.py'):
@@ -76,7 +77,7 @@ async def task_loop():
             if notes['realm_currency'] >= notes['max_realm_currency']:
                 await channel.send(f"<@{name['User_ID']}> Your realm currency is full!")
                 name["Realm_pinged"] = True
-        print("looped")
+    print("looped")
 
 
 @tasks.loop(hours = 7)
@@ -88,7 +89,21 @@ async def pinging_loop():
             name["Resin_pinged"] = False
         if name["Realm_pinged"] == True and notes["realm_currency"] < notes['max_realm_currency']:
             name["Realm_pinged"] = False
-        print("looped2")
+    print("looped2")
+
+@tasks.loop(hours=24)
+async def auto_daily():
+    for name in db["Users"]:
+        try:
+            if name["Auto_daily"] == True:
+                genshincookies(name["User_ID"])
+                try:
+                    await client.claim_daily_reward()
+                except genshin.AlreadyClaimed:
+                    continue
+        except KeyError:
+            continue
+    print("looped3")
 
 
 bot.run(TOKEN)
