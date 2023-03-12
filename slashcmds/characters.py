@@ -7,24 +7,13 @@ from discord import app_commands
 from discord.ext import commands
 import genshinstats as gs
 from MenuButtons import ButtonMenu
+from Cookies import cookie
 
 
 with open("config.json") as config:
     content = json.load(config)
     DATABASE = content["DATABASE"]
     db = Database(db_url=DATABASE)
-
-def cookie(user):
-    for name in db["Users"]:
-        if name["User_ID"] == user:
-            cookie = gs.set_cookie(ltuid=name["ltuid"], ltoken=name["ltoken"])
-            isin=True
-            break
-        else:
-            isin=False
-        if isin==False:
-            cookie = False
-    return cookie
 
 class Characters(commands.Cog):
     def __init__(self, bot:commands.Bot):

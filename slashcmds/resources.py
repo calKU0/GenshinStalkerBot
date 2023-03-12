@@ -1,3 +1,6 @@
+import sys
+sys.path.append('./modules')
+from Cookies import cookie
 import discord
 import json
 from replit import Database
@@ -10,17 +13,6 @@ with open("config.json") as config:
     DATABASE = content["DATABASE"]
     db = Database(db_url=DATABASE)
 
-def cookie(user):
-    for name in db["Users"]:
-        if name["User_ID"] == user:
-            cookie = gs.set_cookie(ltuid=name["ltuid"], ltoken=name["ltoken"])
-            isin=True
-            break
-        else:
-            isin=False
-        if isin==False:
-            cookie = False
-    return cookie
 
 class Resources(commands.Cog):
     def __init__(self, bot:commands.Bot):
