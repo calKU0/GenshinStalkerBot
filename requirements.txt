@@ -5,6 +5,7 @@ argon2-cffi-bindings==21.2.0
 async-timeout==4.0.2
 attrs==22.2.0
 browser-cookie3==0.17.1
+-e git+https://github.com/KrzysztofKurowski0/GenshinStalkerBot@baefbf7c45d4c11d6e0d5be8520cc88cb5753509#egg=calkumodules&subdirectory=modules
 certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==3.1.0
