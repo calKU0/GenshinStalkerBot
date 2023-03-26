@@ -17,5 +17,7 @@ Commands:<br />
 /authkey - links your authkey<br />
 /diary - shows your primogems earnings<br />
 /help - shows information about commands<br />
+/auto - automatically redeeming daily rewards from hoyolab<br />
+/calculator_characters - shows materials needed to asced a character<br />
 
 
