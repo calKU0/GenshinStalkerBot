@@ -1,5 +1,3 @@
-import sys
-sys.path.append('./modules')
 import discord
 import json
 from replit import Database
