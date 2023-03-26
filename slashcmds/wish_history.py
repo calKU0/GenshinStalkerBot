@@ -5,6 +5,7 @@ import genshin
 from replit import Database
 from discord import app_commands
 from discord.ext import commands
+from MenuButtons import ButtonMenu
 
 client = genshin.Client(game=genshin.Game.GENSHIN)
 
