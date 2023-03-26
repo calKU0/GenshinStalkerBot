@@ -1,5 +1,3 @@
-import sys
-sys.path.append('./modules')
 from Cookies import cookie
 import discord
 import json
