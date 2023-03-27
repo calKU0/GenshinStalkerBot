@@ -14,14 +14,12 @@ async def character_autocomplete(interaction: discord.Interaction,
     return choices[:25]
     
 
-async def weapon_autocomplete(
-        interaction: discord.Interaction,
-        current: str,
-    ) -> list[app_commands.Choice[str]]:
-        with open("data/weapons.json","r") as file:
-            content = json.load(file)
-            choices = [
-                app_commands.Choice(name=key, value=val)
-                for key,val in content.items() if current.lower() in key.lower()
+async def weapon_autocomplete(interaction: discord.Interaction,
+    current: str,) -> list[app_commands.Choice[str]]:
+    with open("data/weapons.json","r") as file:
+        content = json.load(file)
+        choices = [
+            app_commands.Choice(name=key, value=key)
+            for key in content.keys() if current.lower() in key.lower()
             ]
-        return choices[:25]
+    return choices[:25]
