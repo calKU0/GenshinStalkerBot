@@ -20,25 +20,37 @@ class Notifications(commands.Cog):
         if notifications.value == "1":
             for name in db["Users"]:
                 if name["User_ID"] == interaction.user.id:
-                    name["Resin"] = True
-                    await interaction.response.send_message("Successfully signed!")
-                    isin = True
-                    break
+                    if name["Resin"] == False:
+                        name["Resin"] = True
+                        await interaction.response.send_message("Successfully signed!")
+                        isin = True
+                        break
+                    else:
+                        name["Resin"] = False
+                        await interaction.response.send_message("Successfully unsigned!")
+                        isin = True
+                        break
                 else:
                     isin = False
             if isin == False:
-                await interaction.response.send_message("You have to register! (type /link)")
+                await interaction.response.send_message("You have to link your hoyolab account! (type `/link help)`")
         else:
             for name in db["Users"]:
                 if name["User_ID"] == interaction.user.id:
-                    name["Realm_currency"] = True
-                    await interaction.response.send_message("Successfully signed!")
-                    isin = True
-                    break
+                    if name["Realm_currency"] == False:
+                        name["Realm_currency"] = True
+                        await interaction.response.send_message("Successfully signed!")
+                        isin = True
+                        break
+                    else:
+                        name["Realm_currency"] = False
+                        await interaction.response.send_message("Successfully unsigned!")
+                        isin = True
+                        break
                 else:
                     isin = False
             if isin == False:
-                await interaction.response.send_message("You have to register! (type /link)")
+                await interaction.response.send_message("You have to link your hoyolab account! (type `/link help)`")
 
 async def setup(bot):
     await bot.add_cog(Notifications(bot))
