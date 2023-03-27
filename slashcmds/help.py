@@ -15,15 +15,18 @@ class Help(commands.Cog):
         self.bot = bot   
 
     @app_commands.command(name="help", description="Helps you :)")
-    async def help(self, interaction: discord.Interaction, command: Optional[Literal['all','link', 'authkey', 'notifications','abbys','characters','pity','wish_history','resources','diary','daily','profile','auto']] = None):
+    async def help(self, interaction: discord.Interaction, command: Optional[Literal['all','link', 'authkey', 'notifications','abbys','characters','pity','wish_history','resources','diary','daily','profile','auto','calculator_weapon','calculator_character']] = None):
         if command is None:
             embed = discord.Embed(title="GenshinStalker Helper",color=discord.Color.from_rgb(219, 42, 166))
-            embed.add_field(name='', value ='<@1064985978651017318> is a discord bot written by calKU!', inline=False)
+            embed.add_field(name='', value ='<@1064985978651017318> is a discord bot written by <@333670274216099850>!', inline=False)
             embed.add_field(name='Want to get all avaliable commands?', value ='Try using `/help command:all`', inline=False)
             embed.add_field(name='Want to learn more about a specific command?', value ='Try specifying the command name on the `help` command: `/help command:_`', inline=False)
             embed.add_field(name='Want to invite the bot to your server?', value ='Try using this: https://discord.com/api/oauth2/authorize?client_id=1064985978651017318&permissions=534723950656&scope=bot', inline=False)
             embed.add_field(name='Why do I have to link authkey', value ="Authkey allows me to get your wish history and is absolutely safe to share. For more information read `/help commad:authkey`", inline=False)
             embed.add_field(name='Why do I have to link cookies', value ="Cookies allows me to get your hoyolab stats and are **NOT SAFE TO SHARE** (I can probably steal your account but dunno how anyway). Before linking your cookies **PLEASE READ** `/help commad:cookies` for more information ", inline=False)
+            embed.add_field(name='See a bug?', value ="Feel free to contact me, I'll be really thankful! <@333670274216099850>", inline=False)
+            embed.add_field(name='Want to help me with this project?', value ="If you want to help me with this project and you have a base knowledge of using git and coding in python, then feel free to dm me :)", inline=False)
+
             await interaction.response.send_message(embed = embed)
 
         elif command == 'all':
@@ -38,6 +41,9 @@ class Help(commands.Cog):
             embed.add_field(name='', value ='`/abbys` Shows your previous abbys stats', inline=False)
             embed.add_field(name='', value ='`/notifications` Enables *ping* notifications if your resing/realm currency is full', inline=False)
             embed.add_field(name='', value ='`/diary` Shows primogems earned this month', inline=False)
+            embed.add_field(name='', value ='`/calculator_character` Calculates materials required to build a character', inline=False)
+            embed.add_field(name='', value ='`/calculator_weapon` Calculates materials required to ascend a weapon', inline=False)
+            embed.add_field(name='', value ='`/auto` Automatically claims your daily from hoyolab', inline=False)
             embed.add_field(name='', value ='`/resources` Shows your current resin and realm currency', inline=False)
             embed.add_field(name='If you want to get more informations about a specific command type `/help command:___`', value ='', inline=False)
             await interaction.response.send_message(embed=embed)
@@ -129,6 +135,21 @@ class Help(commands.Cog):
             embed.add_field(name='What does this command do?', value ='It shows your current resin, realm currency and expeditions capacity', inline=False)
             embed.add_field(name='', value ="Note that you have to set your cookies first. If you didn't, please type `/help command:link` and then `/link`", inline=False)
             await interaction.response.send_message(embed=embed)
+
+        elif command == 'calculator_character':
+            embed = discord.Embed(title="Calculator character",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It calculates materials required to build a character', inline=False)
+            embed.add_field(name='What should I type in *current* and *target* fields', value ="The *current* field is the current level of your character. The *target* field is the target level you want your character to ascend", inline=False)
+            embed.add_field(name="Why can't I choose a character that was leaked 0.5262ms ago?", value="Give me a time to update characters. I'm developing this bot alone and I have a private life as well :). Feel free to contact me if you don't see a character that was released more than a week ago", inline=False)
+            await interaction.response.send_message(embed=embed)
+
+        elif command == 'calculator_weapon':
+            embed = discord.Embed(title="Resources",color=discord.Color.from_rgb(219, 42, 166))
+            embed.add_field(name='What does this command do?', value ='It calculates materials required to ascend a weapon', inline=False)
+            embed.add_field(name='What should I type in *current* and *target* fields', value ="The *current* field is the current level of your weapon. The *target* field is the target level you want your weapon to ascend", inline=False)
+            embed.add_field(name="Why can't I choose a character that was leaked 0.5262ms ago?", value="Give me a time to update weapons. I'm developing this bot alone and I have a private life as well :). Feel free to contact me if you don't see a weapon that was released more than a week ago", inline=False)
+            await interaction.response.send_message(embed=embed)
+
         elif command == 'auto':
             embed = discord.Embed(title="Auto",color=discord.Color.from_rgb(219, 42, 166))
             embed.add_field(name='What does this command do?', value ='It automatically do something for you based on your selected option :)', inline=False)
