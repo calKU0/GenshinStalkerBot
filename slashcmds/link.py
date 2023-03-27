@@ -22,7 +22,10 @@ class Link(commands.Cog):
     async def link(self,interaction: discord.Interaction, ltuid_cookie: str, ltoken_cookie: str, uid: str):
         for name in db["Users"]:
             if name["User_ID"] == interaction.user.id:
-                await interaction.response.send_message("You are already registered!")
+                name["ltuid"] = ltuid_cookie
+                name["ltoken"] = ltoken_cookie
+                name["UID"] = uid
+                await interaction.response.send_message("Succesfully changed tokens!",ephemeral=True)
                 isin=True
                 break
             else:
@@ -39,7 +42,7 @@ class Link(commands.Cog):
                                 "Resin_pinged":False,
                                 "Realm_pinged":False
                                     })
-            await interaction.response.send_message("Succesfully registered!")
+            await interaction.response.send_message("Succesfully registered!",ephemeral=True)
         print(db["Users"])
 
 async def setup(bot):
