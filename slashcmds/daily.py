@@ -46,7 +46,7 @@ class Daily(commands.Cog):
             else:
                 isin = False
         if isin == False:
-            await interaction.response.send_message("You have to register! (type /register)")
+            await interaction.response.send_message("You have to link your hoyolab account! (type `/link help)`")
 
 async def setup(bot):
     await bot.add_cog(Daily(bot))
