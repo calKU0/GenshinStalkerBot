@@ -22,8 +22,8 @@ class Help(commands.Cog):
             embed.add_field(name='Want to get all avaliable commands?', value ='Try using `/help command:all`', inline=False)
             embed.add_field(name='Want to learn more about a specific command?', value ='Try specifying the command name on the `help` command: `/help command:_`', inline=False)
             embed.add_field(name='Want to invite the bot to your server?', value ='Try using this: https://discord.com/api/oauth2/authorize?client_id=1064985978651017318&permissions=534723950656&scope=bot', inline=False)
-            embed.add_field(name='Why do I have to link authkey', value ="Authkey allows me to get your wish history and is absolutely safe to share. For more information read `/help commad:authkey`", inline=False)
-            embed.add_field(name='Why do I have to link cookies', value ="Cookies allows me to get your hoyolab stats and are **NOT SAFE TO SHARE** (I can probably steal your account but dunno how anyway). Before linking your cookies **PLEASE READ** `/help commad:cookies` for more information ", inline=False)
+            embed.add_field(name='Why do I have to link authkey', value ="Authkey allows me to get your wish history and is absolutely safe to share. For more information read `/help command:authkey`", inline=False)
+            embed.add_field(name='Why do I have to link cookies', value ="Cookies allows me to get your hoyolab stats and are **NOT SAFE TO SHARE** (I can probably steal your account but dunno how anyway). Before linking your cookies **PLEASE READ** `/help command:cookies` for more information ", inline=False)
             embed.add_field(name='See a bug?', value ="Feel free to contact me, I'll be really thankful! <@333670274216099850>", inline=False)
             embed.add_field(name='Want to help me with this project?', value ="If you want to help me with this project and you have a base knowledge of using git and coding in python, then feel free to dm me :)", inline=False)
 
