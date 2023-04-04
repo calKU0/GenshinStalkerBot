@@ -4,7 +4,6 @@ from discord.ext import commands, tasks
 import json
 from replit import Database
 import genshinstats as gs
-import os
 from Cookies import cookie
 
 with open("config.json") as config:
@@ -33,9 +32,9 @@ async def pinged_check():
         try:
             cookie(name["User_ID"])
             notes = gs.get_notes(name["UID"])
-            if name["Resin_pinged"] == True and notes['resin'] < notes['max_resin']:
+            if name["Resin_pinged"] and notes['resin'] < notes['max_resin']:
                 name["Resin_pinged"] = False
-            if name["Realm_pinged"] == True and notes["realm_currency"] < notes['max_realm_currency']:
+            if name["Realm_pinged"] and notes["realm_currency"] < notes['max_realm_currency']:
                 name["Realm_pinged"] = False
         except KeyError:
             continue
@@ -46,13 +45,13 @@ async def notifications_ping():
     channel = bot.get_channel(1064465950511992865)
     for name in db["Users"]:
         try:
-            if name["Resin"] == True and name["Resin_pinged"] == False:
+            if name["Resin"] and name["Resin_pinged"] == False:
                 cookie(name["User_ID"])
                 notes = gs.get_notes(name["UID"])
                 if notes['resin'] >= notes['max_resin']:
                     await channel.send(f"<@{name['User_ID']}> Your resin is full!")
                     name["Resin_pinged"] = True
-            if name["Realm_currency"] == True and name["Realm_pinged"] == False:
+            if name["Realm_currency"] and name["Realm_pinged"] == False:
                 cookie(name["User_ID"])
                 notes = gs.get_notes(name["UID"])
                 if notes['realm_currency'] >= notes['max_realm_currency']:
@@ -66,7 +65,7 @@ async def notifications_ping():
 async def auto_daily():
     for name in db["Users"]:
         try:
-            if name["Auto_daily"] == True:
+            if name["Auto_daily"]:
                 genshincookies(name["User_ID"])
                 try:
                     await client.claim_daily_reward()
