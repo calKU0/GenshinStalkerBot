@@ -1,4 +1,7 @@
 # GenshinStalkerBot
+
+> 🧪 **Personal Project** — built for experimentation, fun, or learning.
+
 Get your genshin stats, owned characters information, wish history etc. (This is really really early development)
 <br />
 Invite Link : https://discord.com/api/oauth2/authorize?client_id=1064985978651017318&permissions=534723950656&scope=bot 
